@@ -1,0 +1,17 @@
+<?php
+$vars = $this->vars();
+extract($this->vars()->getArrayCopy());
+$title = 'Delete album';
+$this->title = $title;
+?>
+<p>Are you sure that you want to delete 
+  '<?php echo $vars->escape($album['title']); ?>' by 
+  '<?php echo $vars->escape($album['artist']); ?>'?
+</p>
+<form action="<?php echo $this->plugin('url')->direct(array('controller' => 'album', 'action' => 'delete'), array('name' => 'default')); ?>" method="post">
+<div>
+  <input type="hidden" name="id" value="<?php echo $album['id']; ?>" />
+  <input type="submit" name="del" value="Yes" />
+  <input type="submit" name="del" value="No" />
+</div>
+</form>

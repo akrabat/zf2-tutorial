@@ -1,0 +1,15 @@
+<?php
+$vars = $this->vars();
+extract($this->vars()->getArrayCopy());
+$title = 'Edit album';
+$this->title = $title;
+?>
+
+<h1><?php echo $title;?></h1>
+
+<?php
+$form->setAction($this->plugin('url')->direct(array('controller' => 'album', 'action' => 'edit'), array('name' => 'default')))
+     ->setView($this);
+echo $form;
+
+?>
