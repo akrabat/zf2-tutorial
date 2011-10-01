@@ -47,7 +47,7 @@ class AlbumController extends ActionController
     {
         $form = new AlbumForm();
         $form->id->addValidator('GreaterThan', true, array('min' => 0));
-        $form->submit->setLabel('Add');
+        $form->submit->setLabel('Edit');
 
         $request = $this->getRequest();
         if ($request->isPost()) {
