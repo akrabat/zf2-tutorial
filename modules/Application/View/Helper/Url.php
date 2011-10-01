@@ -1,4 +1,5 @@
 <?php
+
 namespace Application\View\Helper;
 
 use Zend\View\Helper\AbstractHelper,
@@ -13,7 +14,7 @@ class Url extends AbstractHelper
         $this->router = $router;
     }
 
-    public function direct($params = array(), $options = array())
+    public function __invoke($params = array(), $options = array())
     {
         if (null === $this->router) {
             return '';
@@ -27,4 +28,5 @@ class Url extends AbstractHelper
 
         return $url;
     }
+
 }

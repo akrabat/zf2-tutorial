@@ -1,12 +1,11 @@
 <?php 
 $vars = $this->vars();
-extract($this->vars()->getArrayCopy());
 $title = 'My albums';
 $this->title = $title;
 ?>
-<h1><?php echo $title;?></h1>
+<h1><?php echo $vars->escape($title);?></h1>
 
-<p><a href="<?php echo $this->plugin('url')->direct(array('controller'=>'album', 
+<p><a href="<?php echo $this->url(array('controller'=>'album', 
         'action'=>'add'), array('name' => 'default'));?>">Add new album</a></p>
 
 <table>
@@ -15,14 +14,14 @@ $this->title = $title;
     <th>Artist</th>
     <th>&nbsp;</th>
 </tr>
-<?php foreach($albums as $album) : ?>
+<?php foreach($this->albums as $album) : ?>
 <tr>
     <td><?php echo $vars->escape($album->title);?></td>
     <td><?php echo $vars->escape($album->artist);?></td>
     <td>
-        <a href="<?php echo $this->plugin('url')->direct(array('controller'=>'album', 
+        <a href="<?php echo $this->url(array('controller'=>'album', 
             'action'=>'edit'), array('name' => 'default')) . '?id=' . $album->id ;?>">Edit</a>
-        <a href="<?php echo $this->plugin('url')->direct(array('controller'=>'album', 
+        <a href="<?php echo $this->url(array('controller'=>'album', 
             'action'=>'delete'), array('name' => 'default')) . '?id=' . $album->id ;?>">Delete</a>
     </td>
 </tr>

@@ -8,7 +8,7 @@ $this->title = $title;
   '<?php echo $vars->escape($album['title']); ?>' by 
   '<?php echo $vars->escape($album['artist']); ?>'?
 </p>
-<form action="<?php echo $this->plugin('url')->direct(array('controller' => 'album', 'action' => 'delete'), array('name' => 'default')); ?>" method="post">
+<form action="<?php echo $this->url(array('controller' => 'album', 'action' => 'delete'), array('name' => 'default')); ?>" method="post">
 <div>
   <input type="hidden" name="id" value="<?php echo $album['id']; ?>" />
   <input type="submit" name="del" value="Yes" />

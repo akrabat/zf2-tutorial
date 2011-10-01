@@ -8,7 +8,7 @@ $this->title = $title;
 <h1><?php echo $title;?></h1>
 
 <?php
-$form->setAction($this->plugin('url')->direct(array('controller' => 'album', 'action' => 'add'), array('name' => 'default')))
+$form->setAction($this->url(array('controller' => 'album', 'action' => 'add'), array('name' => 'default')))
      ->setView($this);
 echo $form;
 
