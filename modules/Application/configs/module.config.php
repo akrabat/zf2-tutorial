@@ -22,7 +22,7 @@ $production = array(
                 'resolver' => 'Zend\View\TemplatePathStack',
                 'options' => array(
                     'script_paths' => array(
-                        'site' => __DIR__ . '/../views',
+                        'application' => __DIR__ . '/../views',
                     ),
                 ),
             ),
@@ -62,10 +62,10 @@ $testing     = $production;
 $development = $production;
 
 $testing['display_exceptions']     = true;
-$testing['is_live_site']     = false;
+$testing['is_live_site']           = false;
 
 $development['display_exceptions'] = true;
-$development['is_live_site']     = false;
+$development['is_live_site']       = false;
 
 $config = compact('production', 'staging', 'testing', 'development');
 return $config;

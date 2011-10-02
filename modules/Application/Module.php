@@ -25,17 +25,13 @@ class Module
         }
         if (!isset($config->{$env})) {
             throw new InvalidArgumentException(sprintf(
-                'Unrecognized environment "%s" provided to "%s"',
+                'Unrecognized environment "%s" provided to "%s\\%s"',
                 $env,
+                __NAMESPACE__,
                 __METHOD__
             ));
         }
 
         return $config->{$env};
-    }
-
-    public function getClassmap()
-    {
-        return include __DIR__ . '/classmap.php';
     }
 }

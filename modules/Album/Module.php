@@ -35,7 +35,7 @@ class Module
         }
         if (!isset($config->{$env})) {
             throw new InvalidArgumentException(sprintf(
-                'Unrecognized environment "%s" provided to "%s\%s"',
+                'Unrecognized environment "%s" provided to "%s\\%s"',
                 $env,
                 __NAMESPACE__,
                 __METHOD__
