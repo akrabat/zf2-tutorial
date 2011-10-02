@@ -38,7 +38,6 @@ $production = array(
             'options' => array(
                 'regex' => '/(?P<controller>[^/]+)?(/(?P<action>[^/]*)?)?',
                 'defaults' => array(
-                    'controller' => 'album',
                     'action'     => 'index',
                 ),
                 'spec' => '/%controller%/%action%',

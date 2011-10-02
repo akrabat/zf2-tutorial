@@ -1,15 +1,15 @@
-<?php echo $this->doctype(); ?>
+<?php echo $this->doctype()->setDoctype('HTML5'); ?>
 
 <html>
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" >
   <title><?php echo isset($this->title) ? $this->vars()->escape($this->title) . ' - ' : ''; ?>Zend Framework Tutorial</title>
-  <?php echo $this->plugin('headLink')->prependStylesheet('/css/site.css') ?>
+  <?php echo $this->headLink()->prependStylesheet('/css/site.css') ?>
+
 </head>
 <body>
 <div id="content">
 <?php 
-    // Note that $this->vars() in the layout isn't the same $this->vars() that's in the view script.
     echo $this->vars()->getRawValue('content');
 ?>
 

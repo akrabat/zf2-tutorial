@@ -4,7 +4,8 @@ namespace Album;
 
 use InvalidArgumentException,
     Zend\Config\Config,
-    Zend\Module\Manager as ModuleManager;
+    Zend\Module\Manager as ModuleManager,
+    Zend\Loader\AutoloaderFactory;
 
 class Module
 {
@@ -15,7 +16,7 @@ class Module
 
     public function initAutoloader()
     {
-        \Zend\Loader\AutoloaderFactory::factory(array(
+        AutoloaderFactory::factory(array(
             'Zend\Loader\ClassMapAutoloader' => array(
                 __DIR__ . '/autoload_classmap.php',
             ),

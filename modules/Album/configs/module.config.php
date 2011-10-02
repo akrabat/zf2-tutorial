@@ -5,10 +5,6 @@ $production = array(
             'album'        => 'Album\Controller\AlbumController',
         ),
 
-        'preferences' => array(
-            'Zend\Mvc\Router\RouteStack' => 'Zend\Mvc\Router\Http\TreeRouteStack',
-        ),
-
         'Album\Controller\AlbumController' => array(
             'parameters' => array(
                 'router' => 'Zend\Mvc\Router\Http\TreeRouteStack',
