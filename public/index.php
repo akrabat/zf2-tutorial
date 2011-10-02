@@ -10,7 +10,6 @@ require_once '../library/Zend/Loader/AutoloaderFactory.php';
 Zend\Loader\AutoloaderFactory::factory(array(
     'Zend\Loader\ClassMapAutoloader' => array(
         __DIR__ . '/../library/autoload_classmap.php',
-        
     ),
     'Zend\Loader\StandardAutoloader' => array(),
 ));
