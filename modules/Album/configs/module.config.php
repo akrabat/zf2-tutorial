@@ -7,7 +7,6 @@ $production = array(
 
         'Album\Controller\AlbumController' => array(
             'parameters' => array(
-                'router' => 'Zend\Mvc\Router\Http\TreeRouteStack',
                 'table'  => 'Album\Model\DbTable\Albums',
             ),
         ),
