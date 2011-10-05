@@ -1,13 +1,13 @@
 <?php
 $title = 'Add new album';
-$this->title = $title;
+$this->title = $title; // assign to $this to use in layout.phtml
 ?>
 <h1><?php echo $this->vars()->escape($title); ?></h1>
 
 <?php
-$this->form->setAction($this->url(array('controller' => 'album', 'action' => 'add'), 
+$form->setAction($this->url(array('controller' => 'album', 'action' => 'add'), 
         array('name' => 'default')))
      ->setView($this);
-echo $this->form;
+echo $form;
 
 ?>

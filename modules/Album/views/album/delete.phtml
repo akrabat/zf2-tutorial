@@ -1,17 +1,17 @@
 <?php
 $title = 'Delete album';
-$this->title = $title;
+$this->title = $title; // assign to $this to use in layout.phtml
 ?>
 <h1><?php echo $this->vars()->escape($title); ?></h1>
 
 <p>Are you sure that you want to delete 
-  '<?php echo $this->vars->escape($this->album['title']); ?>' by 
-  '<?php echo $this->vars->escape($this->album['artist']); ?>'?
+  '<?php echo $this->vars->escape($album['title']); ?>' by 
+  '<?php echo $this->vars->escape($album['artist']); ?>'?
 </p>
 <form action="<?php echo $this->url(array('controller' => 'album', 
     'action' => 'delete'), array('name' => 'default')); ?>" method="post">
 <div>
-  <input type="hidden" name="id" value="<?php echo $this->album['id']; ?>" />
+  <input type="hidden" name="id" value="<?php echo $album['id']; ?>" />
   <input type="submit" name="del" value="Yes" />
   <input type="submit" name="del" value="No" />
 </div>
