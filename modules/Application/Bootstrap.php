@@ -1,24 +1,22 @@
 <?php
-
 namespace Application;
 
 use Zend\Config\Config,
-    Zend\Di\Configuration,
-    Zend\Di\Definition,
-    Zend\Di\Definition\Builder,
-    Zend\Di\DependencyInjector,
+    Zend\Di\Configuration as DiConfiguration,
+    Zend\Di\Di,
     Zend\EventManager\StaticEventManager,
-    Zend\Stdlib\ResponseDescription as Response,
-    Zend\View\Variables as ViewVariables,
+    Zend\Module\Manager as ModuleManager,
     Zend\Mvc\Application;
 
 class Bootstrap
 {
     protected $config;
+    protected $modules;
 
-    public function __construct(Config $config)
+    public function __construct(Config $config, ModuleManager $modules)
     {
-        $this->config = $config;
+        $this->config  = $config;
+        $this->modules = $modules; 
     }
 
     public function bootstrap(Application $app)
@@ -30,17 +28,10 @@ class Bootstrap
 
     protected function setupLocator(Application $app)
     {
-        /**
-         * Instantiate and configure a DependencyInjector instance, or 
-         * a ServiceLocator, and return it.
-         */
-        $definition = new Definition\AggregateDefinition;
-        $definition->addDefinition(new Definition\RuntimeDefinition);
+        $di = new Di;
+        $di->instanceManager()->addTypePreference('Zend\Di\Locator', $di);
 
-        $di = new DependencyInjector();
-        $di->setDefinition($definition);
-
-        $config = new Configuration($this->config->di);
+        $config = new DiConfiguration($this->config->di);
         $config->configure($di);
 
         $app->setLocator($di);
@@ -48,30 +39,39 @@ class Bootstrap
 
     protected function setupRoutes(Application $app)
     {
-        /**
-         * Pull the routing table from configuration, and pass it to the
-         * router composed in the Application instance.
-         */
-
-        $router = $app->getLocator()->get('Zend\Mvc\Router\Http\TreeRouteStack');
+        $router = $app->getLocator()->get('Zend\Mvc\Router\SimpleRouteStack');
         $router->addRoutes($this->config->routes->toArray());
-
         $app->setRouter($router);
     }
 
     protected function setupEvents(Application $app)
     {
-        /**
-         * Wire events into the Application's EventManager, and/or setup
-         * static listeners for events that may be invoked.
-         */
+        $view         = $this->getView($app);
+        $locator      = $app->getLocator();
+        $events       = $app->events();
+        $staticEvents = StaticEventManager::getInstance();
+
+        foreach ($this->modules->getLoadedModules() as $name => $module) {
+            if (method_exists($module, 'registerApplicationListeners')) {
+                $module->registerApplicationListeners($events, $locator, $this->config);
+            }
+
+            if (method_exists($module, 'registerStaticListeners')) {
+                $module->registerStaticListeners($staticEvents, $locator, $this->config);
+            }
+        }
+    }
+
+    protected function getView($app)
+    {
         $di     = $app->getLocator();
         $view   = $di->get('view');
         $url    = $view->plugin('url');
         $url->setRouter($app->getRouter());
 
-        $listener = new View\Listener($view, 'layouts/layout.phtml');
-        $listener->setDisplayExceptionsFlag($this->config->display_exceptions);
-        $app->events()->attachAggregate($listener);
+        $view->plugin('headTitle')->setSeparator(' - ')
+                                  ->setAutoEscape(false)
+                                  ->append('Application');
+        return $view;
     }
 }

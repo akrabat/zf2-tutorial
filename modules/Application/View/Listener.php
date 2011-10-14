@@ -3,8 +3,10 @@
 namespace Application\View;
 
 use ArrayAccess,
+    Zend\Di\Locator,
     Zend\EventManager\EventCollection,
     Zend\EventManager\ListenerAggregate,
+    Zend\EventManager\StaticEventCollection,
     Zend\Http\Response,
     Zend\Mvc\Application,
     Zend\Mvc\MvcEvent,
@@ -14,6 +16,7 @@ class Listener implements ListenerAggregate
 {
     protected $layout;
     protected $listeners = array();
+    protected $staticListeners = array();
     protected $view;
     protected $displayExceptions = false;
 
@@ -38,7 +41,6 @@ class Listener implements ListenerAggregate
     {
         $this->listeners[] = $events->attach('dispatch.error', array($this, 'renderError'));
         $this->listeners[] = $events->attach('dispatch', array($this, 'render404'), -80);
-        $this->listeners[] = $events->attach('dispatch', array($this, 'renderView'), -100);
         $this->listeners[] = $events->attach('dispatch', array($this, 'renderLayout'), -1000);
     }
 
@@ -51,8 +53,66 @@ class Listener implements ListenerAggregate
         }
     }
 
+    public function registerStaticListeners(StaticEventCollection $events, $locator)
+    {
+        $ident   = 'Application\Controller\PageController';
+        $handler = $events->attach($ident, 'dispatch', array($this, 'renderPageController'), -50);
+        $this->staticListeners[] = array($ident, $handler);
+
+        $ident   = 'Zend\Mvc\Controller\ActionController';
+        $handler = $events->attach($ident, 'dispatch', array($this, 'renderView'), -50);
+        $this->staticListeners[] = array($ident, $handler);
+    }
+
+    public function detachStaticListeners(StaticEventCollection $events)
+    {
+        foreach ($this->staticListeners as $i => $info) {
+            list($id, $handler) = $info;
+            $events->detach($id, $handler);
+            unset($this->staticListeners[$i]);
+        }
+    }
+
+    public function renderPageController(MvcEvent $e)
+    {
+        $page = $e->getResult();
+        if ($page instanceof Response) {
+            return;
+        }
+
+        $response = $e->getResponse();
+        if ($response->isNotFound()) {
+            return;
+        }
+
+        $routeMatch = $e->getRouteMatch();
+
+        if (!$routeMatch) {
+            $page = '404';
+        } else {
+            $page = $routeMatch->getParam('action', '404');
+        }
+
+        if ($page == '404') {
+            $response->setStatusCode(404);
+        }
+
+        $script     = 'pages/' . $page . '.phtml';
+
+        // Action content
+        $content    = $this->view->render($script);
+        $e->setResult($content);
+
+        return $this->renderLayout($e);
+    }
+
     public function renderView(MvcEvent $e)
     {
+        $response = $e->getResponse();
+        if (!$response->isSuccess()) {
+            return;
+        }
+
         $routeMatch = $e->getRouteMatch();
         $controller = $routeMatch->getParam('controller', 'index');
         $action     = $routeMatch->getParam('action', 'index');
@@ -73,13 +133,25 @@ class Listener implements ListenerAggregate
 
     public function renderLayout(MvcEvent $e)
     {
-        $content  = $e->getResult();
-        $layout   = $this->view->render($this->layout, array('content' => $content));
         $response = $e->getResponse();
         if (!$response) {
             $response = new Response();
             $e->setResponse($response);
         }
+        if ($response->isRedirect()) {
+            return $response;
+        }
+
+        $footer   = $e->getParam('footer', false);
+        $vars     = array('footer' => $footer);
+
+        if (false !== ($contentParam = $e->getParam('content', false))) {
+            $vars['content'] = $contentParam;
+        } else {
+            $vars['content'] = $e->getResult();
+        }
+
+        $layout   = $this->view->render($this->layout, $vars);
         $response->setContent($layout);
         return $response;
     }
@@ -99,7 +171,7 @@ class Listener implements ListenerAggregate
 
         $vars = array('message' => 'Page not found.');
 
-        $content = $this->view->render('error/index.phtml', $vars);
+        $content = $this->view->render('pages/404.phtml', $vars);
 
         $e->setResult($content);
 
@@ -121,8 +193,6 @@ class Listener implements ListenerAggregate
             case Application::ERROR_CONTROLLER_INVALID:
                 $vars = array(
                     'message' => 'Page not found.',
-                    'exception'          => $e->getParam('exception'),
-                    'display_exceptions' => $this->displayExceptions(),
                 );
                 $response->setStatusCode(404);
                 break;
