@@ -4,6 +4,7 @@ return new Zend\Config\Config(array(
         realpath(__DIR__ . '/../modules'),
     ),
     'modules' => array(
+        'Album',
         'Application',
     ),
     'module_manager_options' => array( 

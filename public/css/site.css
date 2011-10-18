@@ -1,0 +1,33 @@
+body,html {
+    margin: 0 5px;
+    font-family: Helvetica,Arial,sans-serif;
+}
+h1 {
+    font-size: 1.4em;
+    color: #008000;
+}
+a {
+    color: #008000;
+}
+
+th {
+    text-align: left;
+}
+td, th {
+    padding-right: 5px;
+}
+
+form dt {
+    width: 100px;
+    display: block;
+    float: left;
+    clear: left;
+}
+form dd {
+    margin-left: 0;
+    float: left;
+    
+}
+form #submitbutton {
+    margin-left: 100px;
+}
