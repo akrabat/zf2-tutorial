@@ -5,23 +5,32 @@ namespace Application;
 use InvalidArgumentException,
     Zend\Module\Manager,
     Zend\Config\Config,
-    Zend\EventManager\StaticEventManager;
+    Zend\EventManager\StaticEventManager,
+    Zend\Module\Consumer\AutoloaderProvider;
 
-class Module
+class Module implements AutoloaderProvider
 {
     protected $view;
     protected $viewListener;
 
     public function init(Manager $moduleManager)
     {
-        $this->initAutoloader($moduleManager->getOptions()->getApplicationEnv());
         $events = StaticEventManager::getInstance();
         $events->attach('bootstrap', 'bootstrap', array($this, 'initializeView'), 100);
     }
 
-    protected function initAutoloader($env = null)
+   public function getAutoloaderConfig()
     {
-        require __DIR__ . '/autoload_register.php';
+        return array(
+            'Zend\Loader\ClassMapAutoloader' => array(
+                __DIR__ . '/autoload_classmap.php',
+            ),
+            'Zend\Loader\StandardAutoloader' => array(
+                'namespaces' => array(
+                    __NAMESPACE__ => __DIR__ . '/src/' . __NAMESPACE__,
+                ),
+            ),
+        );
     }
 
     public function getConfig()
@@ -33,7 +42,7 @@ class Module
     {
         $app          = $e->getParam('application');
         $locator      = $app->getLocator();
-        $config       = $e->getParam('modules')->getMergedConfig();
+        $config       = $e->getParam('config');
         $view         = $this->getView($app);
         $viewListener = $this->getViewListener($view, $config);
         $app->events()->attachAggregate($viewListener);
