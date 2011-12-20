@@ -2,40 +2,35 @@
 return array(
     'di' => array(
         'instance' => array(
-            'Zend\View\PhpRenderer' => array(
+            'alias' => array(
+                'album' => 'Album\Controller\AlbumController',
+            ),
+            'Album\Controller\AlbumController' => array(
                 'parameters' => array(
-                    'resolver' => 'Zend\View\TemplatePathStack',
-                    'options'  => array(
-                        'script_paths' => array(
-                            'application' => __DIR__ . '/../views',
-                        ),
+                    'albumTable' => 'Album\Model\AlbumTable',
+                ),
+            ),
+            'Album\Model\AlbumTable' => array(
+                'parameters' => array(
+                    'config' => 'Zend\Db\Adapter\Mysqli',
+            )),
+            'Zend\Db\Adapter\Mysqli' => array(
+                'parameters' => array(
+                    'config' => array(
+                        'host' => 'localhost',
+                        'username' => 'rob',
+                        'password' => '123456',
+                        'dbname' => 'zf2tutorial',
                     ),
                 ),
             ),
-        ),
-    ),
-    'routes' => array(
-        'default' => array(
-            'type'    => 'Zend\Mvc\Router\Http\Segment',
-            'options' => array(
-                'route'    => '/[:controller[/:action]]',
-                'constraints' => array(
-                    'controller' => '[a-zA-Z][a-zA-Z0-9_-]*',
-                    'action'     => '[a-zA-Z][a-zA-Z0-9_-]*',
-                ),
-                'defaults' => array(
-                    'controller' => 'index',
-                    'action'     => 'index',
-                ),
-            ),
-        ),
-        'home' => array(
-            'type' => 'Zend\Mvc\Router\Http\Literal',
-            'options' => array(
-                'route'    => '/',
-                'defaults' => array(
-                    'controller' => 'index',
-                    'action'     => 'index',
+            'Zend\View\PhpRenderer' => array(
+                'parameters' => array(
+                    'options'  => array(
+                        'script_paths' => array(
+                            'album' => __DIR__ . '/../views',
+                        ),
+                    ),
                 ),
             ),
         ),
