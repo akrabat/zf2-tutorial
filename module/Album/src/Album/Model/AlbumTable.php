@@ -10,7 +10,7 @@ class AlbumTable extends AbstractTable
 
     public function getAlbum($id)
     {
-        $id = (int) $id;
+        $id  = (int) $id;
         $row = $this->fetchRow('id = ' . $id);
         if (!$row) {
             throw new Exception("Could not find row $id");
@@ -22,7 +22,7 @@ class AlbumTable extends AbstractTable
     {
         $data = array(
             'artist' => $artist,
-            'title' => $title,
+            'title'  => $title,
         );
         $this->insert($data);
     }
@@ -31,7 +31,7 @@ class AlbumTable extends AbstractTable
     {
         $data = array(
             'artist' => $artist,
-            'title' => $title,
+            'title'  => $title,
         );
         $this->update($data, 'id = ' . (int) $id);
     }
