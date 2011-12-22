@@ -97,7 +97,7 @@ class AlbumController extends ActionController
         return array('album' => $this->albumTable->getAlbum($id));        
     }
 
-    public function setAlbums(AlbumTable $albumTable)
+    public function setAlbumTable(AlbumTable $albumTable)
     {
         $this->albumTable = $albumTable;
         return $this;
