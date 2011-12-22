@@ -90,7 +90,10 @@ class AlbumController extends ActionController
             }
 
             // Redirect to list of albums
-            return $this->redirectToList();
+            return $this->redirect()->toRoute('default', array(
+                'controller' => 'album',
+                'action'     => 'index',
+            ));
         }
 
         $id = $request->query()->get('id', 0);
