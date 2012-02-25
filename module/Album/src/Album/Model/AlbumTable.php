@@ -13,7 +13,7 @@ class AlbumTable extends AbstractTable
         $id  = (int) $id;
         $row = $this->fetchRow('id = ' . $id);
         if (!$row) {
-            throw new Exception("Could not find row $id");
+            throw new \Exception("Could not find row $id");
         }
         return $row->toArray();
     }
