@@ -24,12 +24,10 @@ return array(
                     ),
                 ),
             ),
-            'Zend\View\PhpRenderer' => array(
+            'Zend\View\Resolver\TemplatePathStack' => array(
                 'parameters' => array(
-                    'options'  => array(
-                        'script_paths' => array(
-                            'album' => __DIR__ . '/../views',
-                        ),
+                    'paths'  => array(
+                        'album' => __DIR__ . '/../view',
                     ),
                 ),
             ),
