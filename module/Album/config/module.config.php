@@ -1,6 +1,7 @@
 <?php
 return array(
     'di' => array(
+
         'instance' => array(
             'alias' => array(
                 'album' => 'Album\Controller\AlbumController',
@@ -12,18 +13,31 @@ return array(
             ),
             'Album\Model\AlbumTable' => array(
                 'parameters' => array(
-                    'config' => 'Zend\Db\Adapter\Mysqli',
-            )),
-            'Zend\Db\Adapter\Mysqli' => array(
+                    'adapter' => 'Zend\Db\Adapter\Adapter',
+                )
+            ),
+            'Zend\Db\Adapter\Adapter' => array(
                 'parameters' => array(
-                    'config' => array(
-                        'host' => 'localhost',
+                    'driver' => array(
+                        'driver' => 'Pdo',
                         'username' => 'rob',
                         'password' => '123456',
-                        'dbname' => 'zf2tutorial',
+                        'dsn'   => 'mysql:dbname=zf2tutorial;hostname=localhost',
                     ),
-                ),
+                )
             ),
+            'old-Zend\Db\Adapter\Adapter' => array(
+                'parameters' => array(
+                    'driver' => array(
+                        'driver'   => 'PdoMysql',
+                        'host'     => 'localhost',
+                        'username' => 'rob',
+                        'password' => '123456',
+                        'database' => 'zf2tutorial',
+                    ),
+                )
+            ),
+
             'Zend\View\Resolver\TemplatePathStack' => array(
                 'parameters' => array(
                     'paths'  => array(

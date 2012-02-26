@@ -2,20 +2,32 @@
 
 namespace Album\Model;
 
-use Zend\Db\Table\AbstractTable;
+use Zend\Db\TableGateway\TableGateway,
+    Zend\Db\Adapter\Adapter,
+    Zend\Db\ResultSet\ResultSet;
 
-class AlbumTable extends AbstractTable
+class AlbumTable extends TableGateway
 {
-    protected $_name = 'album';
+    public function __construct(Adapter $adapter = null, $databaseSchema = null, ResultSet $selectResultPrototype = null)
+    {
+        return parent::__construct('album', $adapter, $databaseSchema, $selectResultPrototype);
+    }
+
+    public function fetchAll()
+    {
+        $resultSet = $this->select();
+        return $resultSet;
+    }
 
     public function getAlbum($id)
     {
         $id  = (int) $id;
-        $row = $this->fetchRow('id = ' . $id);
+        $rowset = $this->select(array('id' => $id));
+        $row = $rowset->current();
         if (!$row) {
             throw new \Exception("Could not find row $id");
         }
-        return $row->toArray();
+        return $row;
     }
 
     public function addAlbum($artist, $title)

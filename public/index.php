@@ -1,7 +1,15 @@
 <?php
+error_reporting(E_ALL|E_STRICT);
 chdir(dirname(__DIR__));
 require_once (getenv('ZF2_PATH') ?: 'vendor/ZendFramework/library') . '/Zend/Loader/AutoloaderFactory.php';
-Zend\Loader\AutoloaderFactory::factory();
+
+Zend\Loader\AutoloaderFactory::factory(array('Zend\Loader\StandardAutoloader' => array(
+                'namespaces' => array(
+                    'Zend\Db' => realpath('vendor/Zend/Db'),
+                    'Zend' => realpath(getenv('ZF2_PATH').'/Zend'),
+                ),
+            ),));
+
 
 $appConfig = include 'config/application.config.php';
 
