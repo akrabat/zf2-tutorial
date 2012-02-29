@@ -46,7 +46,7 @@ echo $this->doctype();
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </a>
-          <a class="brand" href="<?php echo $this->url('home') ?>">ZF2 Tutorial</a>
+          <a class="brand" href="<?php echo $this->url('home') ?>">Skeleton Application</a>
           <div class="nav-collapse">
             <ul class="nav">
               <li class="active"><a href="<?php echo $this->url('home') ?>">Home</a></li>
@@ -58,11 +58,12 @@ echo $this->doctype();
 
     <div class="container">
 
-      <?php echo $this->raw('content'); ?>
+      <?php echo $this->content; ?>
 
       <hr>
 
       <footer>
+        <p>&copy; 2006 - 2012 by Zend Technologies Ltd. All rights reserved.</p>
       </footer>
 
     </div> <!-- /container -->
