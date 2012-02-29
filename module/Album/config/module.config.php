@@ -26,17 +26,6 @@ return array(
                     ),
                 )
             ),
-            'old-Zend\Db\Adapter\Adapter' => array(
-                'parameters' => array(
-                    'driver' => array(
-                        'driver'   => 'PdoMysql',
-                        'host'     => 'localhost',
-                        'username' => 'rob',
-                        'password' => '123456',
-                        'database' => 'zf2tutorial',
-                    ),
-                )
-            ),
 
             'Zend\View\Resolver\TemplatePathStack' => array(
                 'parameters' => array(
