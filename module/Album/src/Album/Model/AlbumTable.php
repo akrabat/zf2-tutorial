@@ -45,12 +45,12 @@ class AlbumTable extends TableGateway
             'artist' => $artist,
             'title'  => $title,
         );
-        $this->update($data, 'id = ' . (int) $id);
+        $this->update($data, array('id' => $id));
     }
 
     public function deleteAlbum($id)
     {
-        $this->delete('id =' . (int) $id);
+        $this->delete(array('id' => $id));
     }
 
 }
