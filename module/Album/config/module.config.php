@@ -20,13 +20,15 @@ return array(
                 'parameters' => array(
                     'driver' => array(
                         'driver' => 'Pdo',
-                        'username' => 'rob',
-                        'password' => '123456',
-                        'dsn'   => 'mysql:dbname=zf2tutorial;hostname=localhost',
+                        'dsn'            => 'mysql:dbname=zf2tutorial;hostname=localhost',
+                        'username'       => 'rob',
+                        'password'       => '123456',
+                        'driver_options' => array(
+                            PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES \'UTF8\''
+                        ),
                     ),
                 )
             ),
-
             'Zend\View\Resolver\TemplatePathStack' => array(
                 'parameters' => array(
                     'paths'  => array(

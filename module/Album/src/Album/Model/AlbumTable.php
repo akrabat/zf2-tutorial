@@ -8,9 +8,11 @@ use Zend\Db\TableGateway\TableGateway,
 
 class AlbumTable extends TableGateway
 {
-    public function __construct(Adapter $adapter = null, $databaseSchema = null, ResultSet $selectResultPrototype = null)
+    public function __construct(Adapter $adapter = null, $databaseSchema = null, 
+        ResultSet $selectResultPrototype = null)
     {
-        return parent::__construct('album', $adapter, $databaseSchema, $selectResultPrototype);
+        return parent::__construct('album', $adapter, $databaseSchema, 
+            $selectResultPrototype);
     }
 
     public function fetchAll()

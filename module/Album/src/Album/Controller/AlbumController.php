@@ -4,7 +4,8 @@ namespace Album\Controller;
 
 use Zend\Mvc\Controller\ActionController,
     Album\Model\AlbumTable,
-    Album\Form\AlbumForm;
+    Album\Form\AlbumForm,
+    Zend\View\Model\ViewModel;
 
 class AlbumController extends ActionController
 {
@@ -15,9 +16,9 @@ class AlbumController extends ActionController
 
     public function indexAction()
     {
-        return array(
+        return new ViewModel(array(
             'albums' => $this->albumTable->fetchAll(),
-        );
+        ));
     }
 
     public function addAction()
