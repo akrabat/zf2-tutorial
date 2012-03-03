@@ -72,7 +72,10 @@ class AlbumController extends ActionController
         } else {
             $id = $request->query()->get('id', 0);
             if ($id > 0) {
-                $form->populate($this->albumTable->getAlbum($id));
+                $album = $this->albumTable->getAlbum($id);
+                if ($album) {
+                    $form->populate($album->getArrayCopy());
+                }
             }
         }
 
