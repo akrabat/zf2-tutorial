@@ -23,9 +23,9 @@ return array(
                         'dsn'            => 'mysql:dbname=zf2tutorial;hostname=localhost',
                         'username'       => 'rob',
                         'password'       => '123456',
-                        'driver_options' => array(
-                            PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES \'UTF8\''
-                        ),
+                        // 'driver_options' => array(
+                        //     PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES \'UTF8\''
+                        // ),
                     ),
                 )
             ),
