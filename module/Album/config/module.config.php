@@ -3,9 +3,6 @@ return array(
     'di' => array(
 
         'instance' => array(
-            'alias' => array(
-                'album' => 'Album\Controller\AlbumController',
-            ),
             'Album\Controller\AlbumController' => array(
                 'parameters' => array(
                     'albumTable' => 'Album\Model\AlbumTable',
@@ -36,6 +33,40 @@ return array(
                     ),
                 ),
             ),
+
+            /**
+             * View helper(s)
+             */
+            'Zend\View\HelperLoader' => array(
+                'parameters' => array(
+                    'map' => array(
+                        'zfcUserIdentity' => 'ZfcUser\View\Helper\ZfcUserIdentity',
+                        'zfcUserLoginWidget' => 'ZfcUser\View\Helper\ZfcUserLoginWidget',
+                    ),
+                ),
+            ),
+
+            // Setup the router and routes
+            'Zend\Mvc\Router\RouteStack' => array(
+                'parameters' => array(
+                    'routes' => array(
+                        'album' => array(
+                            'type'    => 'Zend\Mvc\Router\Http\Segment',
+                            'options' => array(
+                                'route'    => '/album[/:action]',
+                                'constraints' => array(
+                                    'action'     => '[a-zA-Z][a-zA-Z0-9_-]*',
+                                ),
+                                'defaults' => array(
+                                    'controller' => 'Album\Controller\AlbumController',
+                                    'action'     => 'index',
+                                ),
+                            ),
+                        ),
+                    ),
+                ),
+            ),
+
         ),
     ),
 );

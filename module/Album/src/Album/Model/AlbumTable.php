@@ -11,8 +11,11 @@ class AlbumTable extends TableGateway
     public function __construct(Adapter $adapter = null, $databaseSchema = null, 
         ResultSet $selectResultPrototype = null)
     {
-        return parent::__construct('album', $adapter, $databaseSchema, 
+        parent::__construct('album', $adapter, $databaseSchema, 
             $selectResultPrototype);
+
+        $resultSetPrototype = $this->getSelectResultPrototype();
+        $resultSetPrototype->setRowObjectPrototype(new Album);
     }
 
     public function fetchAll()
@@ -31,6 +34,26 @@ class AlbumTable extends TableGateway
         }
         return $row;
     }
+
+    public function saveAlbum(Album $album)
+    {
+        $data = array(
+            'artist' => $album->artist,
+            'title'  => $album->title,
+        );
+
+        $id = (int)$album->id;
+        if ($id == 0) {
+            $this->insert($data);
+        } else {
+            if ($this->getAlbum($id)) {
+                $this->update($data, array('id' => $id));
+            } else {
+                throw new \Exception('Form id does not exit');
+            }
+        }
+    }
+
 
     public function addAlbum($artist, $title)
     {

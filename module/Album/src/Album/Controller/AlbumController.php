@@ -4,6 +4,7 @@ namespace Album\Controller;
 
 use Zend\Mvc\Controller\ActionController,
     Album\Model\AlbumTable,
+    Album\Model\Album,
     Album\Form\AlbumForm,
     Zend\View\Model\ViewModel;
 
@@ -24,63 +25,55 @@ class AlbumController extends ActionController
     public function addAction()
     {
         $form = new AlbumForm();
-        $form->submit->setLabel('Add');
+        $form->get('submit')->setAttribute('label', 'Add');
 
         $request = $this->getRequest();
         if ($request->isPost()) {
-            $formData = $request->post()->toArray();
-            if ($form->isValid($formData)) {
-                $artist = $form->getValue('artist');
-                $title  = $form->getValue('title');
-                $this->albumTable->addAlbum($artist, $title);
+            $album = new Album;
+            $form->setInputFilter($album->getInputFilter());
+            $form->bind($album);
+            $form->setData($request->post());
+            if ($form->isValid()) {
+                $this->albumTable->saveAlbum($album);
 
                 // Redirect to list of albums
-                return $this->redirect()->toRoute('default', array(
-                    'controller' => 'album',
-                    'action'     => 'index',
-                ));
+                return $this->redirect()->toRoute('album');
 
             }
         }
 
         return array('form' => $form);
-
     }
 
     public function editAction()
     {
-        $form = new AlbumForm();
-        $form->submit->setLabel('Edit');
-
         $request = $this->getRequest();
+        $id = $request->query()->get('id', 0);
+        if (!$id) {
+            return $this->redirect()->toRoute('album', array('action'=>'add'));
+        }
+        $album = $this->albumTable->getAlbum($id);
+
+        $form = new AlbumForm();
+        $form->get('submit')->setAttribute('label', 'Edit');
         if ($request->isPost()) {
-            $formData = $request->post()->toArray();
-            if ($form->isValid($formData)) {
-                $id     = $form->getValue('id');
-                $artist = $form->getValue('artist');
-                $title  = $form->getValue('title');
-                
-                if ($this->albumTable->getAlbum($id)) {
-                    $this->albumTable->updateAlbum($id, $artist, $title);
-                }
+            $form->setInputFilter($album->getInputFilter());
+            $form->bind($album);
+            $form->setData($request->post());
+            if ($form->isValid()) {
+                $this->albumTable->saveAlbum($album);
 
                 // Redirect to list of albums
-                return $this->redirect()->toRoute('default', array(
-                    'controller' => 'album',
-                    'action'     => 'index' ,
-                ));
+                return $this->redirect()->toRoute('album');
             }
         } else {
-            $id = $request->query()->get('id', 0);
-            if ($id > 0) {
-                $album = $this->albumTable->getAlbum($id);
-                if ($album) {
-                    $form->populate($album->getArrayCopy());
-                }
-            }
+            $form->setData($album->getArrayCopy());
         }
 
-        return array('form' => $form);
+        return array(
+            'id' => $id,
+            'form' => $form,
+        );
     }
 
     public function deleteAction()
