@@ -10,8 +10,8 @@ class Module implements AutoloaderProvider
 {
     public function init(Manager $moduleManager)
     {
-        $sharedEvents = $moduleManager->events()->getSharedCollections();
-        $sharedEvents->attach('bootstrap', 'bootstrap', array($this, 'initializeView'), 100);
+        $events = StaticEventManager::getInstance();
+        $events->attach('bootstrap', 'bootstrap', array($this, 'initializeView'), 100);
     }
 
     public function getAutoloaderConfig()
@@ -39,8 +39,6 @@ class Module implements AutoloaderProvider
         $basePath     = $app->getRequest()->getBasePath();
         $locator      = $app->getLocator();
         $renderer     = $locator->get('Zend\View\Renderer\PhpRenderer');
-        $renderer->plugin('url')->setRouter($app->getRouter());
-        $renderer->doctype()->setDoctype('HTML5');
         $renderer->plugin('basePath')->setBasePath($basePath);
     }
 }
