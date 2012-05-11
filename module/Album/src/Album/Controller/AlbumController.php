@@ -55,19 +55,17 @@ class AlbumController extends ActionController
         $album = $this->albumTable->getAlbum($id);
 
         $form = new AlbumForm();
+        $form->bind($album);
         $form->get('submit')->setAttribute('label', 'Edit');
         if ($request->isPost()) {
-            $form->setInputFilter($album->getInputFilter());
-            $form->bind($album);
             $form->setData($request->post());
             if ($form->isValid()) {
+                LDBG($album);exit;
                 $this->albumTable->saveAlbum($album);
 
                 // Redirect to list of albums
                 return $this->redirect()->toRoute('album');
             }
-        } else {
-            $form->setData($album->getArrayCopy());
         }
 
         return array(

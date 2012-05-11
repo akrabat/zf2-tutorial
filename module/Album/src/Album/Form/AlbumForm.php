@@ -17,38 +17,38 @@ class AlbumForm extends Form
         $factory = new FormFactory();
 
         // Id
-        $this->add($factory->createElement(array(
+        $this->add(array(
             'name' => 'id',
             'attributes' => array(
                 'type'  => 'hidden',
             ),
-        )));
+        ));
 
         // Artist        
-        $this->add($factory->createElement(array(
+        $this->add(array(
             'name' => 'artist',
             'attributes' => array(
                 'type'  => 'text',
                 'label' => 'Artist',
             ),
-        )));
+        ));
 
-        $this->add($factory->createElement(array(
+        $this->add(array(
             'name' => 'title',
             'attributes' => array(
                 'type'  => 'text',
                 'label' => 'Title',
             ),
-        )));
+        ));
 
-        $this->add($factory->createElement(array(
+        $this->add(array(
             'name' => 'submit',
             'attributes' => array(
                 'type'  => 'submit',
                 'label' => 'Go',
                 'id' => 'submitbutton',
             ),
-        )));
+        ));
 
     }
 }
