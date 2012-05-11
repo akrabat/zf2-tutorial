@@ -47,7 +47,7 @@ return array(
             ),
 
             // Setup the router and routes
-            'Zend\Mvc\Router\RouteStack' => array(
+            'Zend\Mvc\Router\RouteStackInterface' => array(
                 'parameters' => array(
                     'routes' => array(
                         'album' => array(

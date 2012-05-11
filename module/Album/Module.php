@@ -12,7 +12,7 @@ class Module implements AutoloaderProvider
 
     public function init(Manager $moduleManager)
     {
-        $sharedEvents = $moduleManager->events()->getSharedCollections();
+        $sharedEvents = $moduleManager->events()->getSharedManager();
         $sharedEvents->attach('bootstrap', 'bootstrap', array($this, 'onBootstrap'));
     }
 
