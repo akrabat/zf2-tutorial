@@ -29,11 +29,12 @@ class AlbumController extends ActionController
 
         $request = $this->getRequest();
         if ($request->isPost()) {
-            $album = new Album;
+            $album = new Album();
             $form->setInputFilter($album->getInputFilter());
-            $form->bind($album);
             $form->setData($request->post());
             if ($form->isValid()) {
+
+                $album->populate($form->getData());
                 $this->albumTable->saveAlbum($album);
 
                 // Redirect to list of albums
@@ -55,12 +56,13 @@ class AlbumController extends ActionController
         $album = $this->albumTable->getAlbum($id);
 
         $form = new AlbumForm();
+        $form->setBindOnValidate(false);
         $form->bind($album);
         $form->get('submit')->setAttribute('label', 'Edit');
         if ($request->isPost()) {
             $form->setData($request->post());
             if ($form->isValid()) {
-                LDBG($album);exit;
+                $form->bindValues();
                 $this->albumTable->saveAlbum($album);
 
                 // Redirect to list of albums
