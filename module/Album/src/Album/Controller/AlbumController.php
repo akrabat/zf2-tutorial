@@ -48,8 +48,7 @@ class AlbumController extends ActionController
 
     public function editAction()
     {
-        $request = $this->getRequest();
-        $id = $request->query()->get('id', 0);
+        $id = (int)$this->getEvent()->getRouteMatch()->getParam('id');
         if (!$id) {
             return $this->redirect()->toRoute('album', array('action'=>'add'));
         }
@@ -59,6 +58,8 @@ class AlbumController extends ActionController
         $form->setBindOnValidate(false);
         $form->bind($album);
         $form->get('submit')->setAttribute('label', 'Edit');
+        
+        $request = $this->getRequest();
         if ($request->isPost()) {
             $form->setData($request->post());
             if ($form->isValid()) {
@@ -78,11 +79,16 @@ class AlbumController extends ActionController
 
     public function deleteAction()
     {
+        $id = (int)$this->getEvent()->getRouteMatch()->getParam('id');
+        if (!$id) {
+            return $this->redirect()->toRoute('album');
+        }
+
         $request = $this->getRequest();
         if ($request->isPost()) {
             $del = $request->post()->get('del', 'No');
             if ($del == 'Yes') {
-                $id = $request->post()->get('id');
+                $id = (int)$request->post()->get('id');
                 $this->albumTable->deleteAlbum($id);
             }
 
@@ -93,8 +99,10 @@ class AlbumController extends ActionController
             ));
         }
 
-        $id = $request->query()->get('id', 0);
-        return array('album' => $this->albumTable->getAlbum($id));        
+        return array(
+            'id' => $id,
+            'album' => $this->albumTable->getAlbum($id)
+        );
     }
 
     public function setAlbumTable(AlbumTable $albumTable)

@@ -51,9 +51,9 @@ return array(
                 'parameters' => array(
                     'routes' => array(
                         'album' => array(
-                            'type'    => 'Zend\Mvc\Router\Http\Segment',
+                            'type'    => 'segment',
                             'options' => array(
-                                'route'    => '/album[/:action]',
+                                'route'    => '/album[/:action][/:id]',
                                 'constraints' => array(
                                     'action'     => '[a-zA-Z][a-zA-Z0-9_-]*',
                                 ),
