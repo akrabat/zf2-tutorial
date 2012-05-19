@@ -20,8 +20,8 @@ $serviceManager->get('ModuleManager')->loadModules();
 // Retrieve service_manager configuration from ModuleManager and set into the ServiceManager instance
 
 // This doesn't work
-// $mergedServiceManagerConfiguration = $serviceManager->get('Configuration')->service_manager->toArray();
-// $smConfiguration = new ServiceManagerConfiguration($mergedServiceManagerConfiguration);
+// $mergedConfiguration = $serviceManager->get('Configuration')->toArray();
+// $smConfiguration = new ServiceManagerConfiguration($mergedConfiguration['service_manager']);
 // $smConfiguration->configureServiceManager($serviceManager);
 
 // This does work
