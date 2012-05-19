@@ -12,22 +12,6 @@ return array(
         ),
     ),
 
-    // Service Manager factories for creating an AlbumTable with a configured Db\Adapter.
-    'service_manager' => array(
-        'factories' => array (
-            'db-adapter' =>  function($sm) {
-                $config = $sm->get('config')->db->toArray();
-                $dbAdapter = new Zend\Db\Adapter\Adapter($config);
-                return $dbAdapter;
-            },
-            'album-table' =>  function($sm) {
-                $dbAdapter = $sm->get('db-adapter');
-                $table = new Album\Model\AlbumTable($dbAdapter);
-                return $table;
-            },
-        ),
-    ),
-
     // Controllers in this module
     'controller' => array(
         'classes' => array(

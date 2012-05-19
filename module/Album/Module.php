@@ -3,6 +3,8 @@
 namespace Album;
 
 use Zend\Form\View\HelperLoader as FormHelperLoader;
+use Zend\Db\Adapter\Adapter as DbAdapter;
+use Album\Model\AlbumTable;
 
 class Module
 {
@@ -36,11 +38,29 @@ class Module
     public function onAlbumDispatched($e)
     {
         // This is only called if a controller within our module has been dispatched
-        $app            = $e->getParam('application');
-        $serviceManager = $app->getServiceManager();
+        $application    = $e->getParam('application');
+        $serviceManager = $application->getServiceManager();
         $helperLoader   = $serviceManager->get('Zend\View\HelperLoader');
 
         $helperLoader->registerPlugins(new FormHelperLoader());
+    }
+
+    public function getServiceConfiguration()
+    {
+        return array(
+            'factories' => array(
+                'db-adapter' =>  function($sm) {
+                    $config = $sm->get('config')->db->toArray();
+                    $dbAdapter = new DbAdapter($config);
+                    return $dbAdapter;
+                },
+                'album-table' =>  function($sm) {
+                    $dbAdapter = $sm->get('db-adapter');
+                    $table = new AlbumTable($dbAdapter);
+                    return $table;
+                },
+            ),
+        );
     }
 
 }
