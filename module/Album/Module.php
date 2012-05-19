@@ -32,7 +32,7 @@ class Module
         $application        = $e->getParam('application');
         $sharedEventManager = $application->events()->getSharedManager();
         $sharedEventManager->attach('Album', 'dispatch', array($this, 'onAlbumDispatched'), 2);
-        // (change 2 to -2 if you want to call the listener before the action is dispatched)
+        // (change 2 to -2 if you want the listener to trigger before the action is dispatched)
     }
 
     public function onAlbumDispatched($e)
@@ -49,11 +49,6 @@ class Module
     {
         return array(
             'factories' => array(
-                'db-adapter' =>  function($sm) {
-                    $config = $sm->get('config')->db->toArray();
-                    $dbAdapter = new DbAdapter($config);
-                    return $dbAdapter;
-                },
                 'album-table' =>  function($sm) {
                     $dbAdapter = $sm->get('db-adapter');
                     $table = new AlbumTable($dbAdapter);
