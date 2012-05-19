@@ -3,7 +3,6 @@
 namespace Album;
 
 use Zend\Form\View\HelperLoader as FormHelperLoader;
-use Zend\Db\Adapter\Adapter as DbAdapter;
 use Album\Model\AlbumTable;
 
 class Module

@@ -2,6 +2,8 @@
 
 namespace Application;
 
+use Zend\Db\Adapter\Adapter as DbAdapter;
+
 class Module
 {
     public function getAutoloaderConfig()
