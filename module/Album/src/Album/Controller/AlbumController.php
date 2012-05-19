@@ -18,7 +18,7 @@ class AlbumController extends ActionController
     public function indexAction()
     {
         return new ViewModel(array(
-            'albums' => $this->albumTable->fetchAll(),
+            'albums' => $this->getAlbumTable()->fetchAll(),
         ));
     }
 
@@ -35,7 +35,7 @@ class AlbumController extends ActionController
             if ($form->isValid()) {
 
                 $album->populate($form->getData());
-                $this->albumTable->saveAlbum($album);
+                $this->getAlbumTable()->saveAlbum($album);
 
                 // Redirect to list of albums
                 return $this->redirect()->toRoute('album');
@@ -52,7 +52,7 @@ class AlbumController extends ActionController
         if (!$id) {
             return $this->redirect()->toRoute('album', array('action'=>'add'));
         }
-        $album = $this->albumTable->getAlbum($id);
+        $album = $this->getAlbumTable()->getAlbum($id);
 
         $form = new AlbumForm();
         $form->setBindOnValidate(false);
@@ -64,7 +64,7 @@ class AlbumController extends ActionController
             $form->setData($request->post());
             if ($form->isValid()) {
                 $form->bindValues();
-                $this->albumTable->saveAlbum($album);
+                $this->getAlbumTable()->saveAlbum($album);
 
                 // Redirect to list of albums
                 return $this->redirect()->toRoute('album');
@@ -89,7 +89,7 @@ class AlbumController extends ActionController
             $del = $request->post()->get('del', 'No');
             if ($del == 'Yes') {
                 $id = (int)$request->post()->get('id');
-                $this->albumTable->deleteAlbum($id);
+                $this->getAlbumTable()->deleteAlbum($id);
             }
 
             // Redirect to list of albums
@@ -101,7 +101,7 @@ class AlbumController extends ActionController
 
         return array(
             'id' => $id,
-            'album' => $this->albumTable->getAlbum($id)
+            'album' => $this->getAlbumTable()->getAlbum($id)
         );
     }
 
@@ -109,5 +109,14 @@ class AlbumController extends ActionController
     {
         $this->albumTable = $albumTable;
         return $this;
-    }    
+    }
+
+    public function getAlbumTable()
+    {
+        if (!$this->albumTable) {
+            $sm = $this->getServiceLocator();
+            $this->albumTable = $sm->get('album-table');
+        }
+        return $this->albumTable;
+    }
 }

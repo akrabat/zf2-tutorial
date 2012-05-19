@@ -2,22 +2,10 @@
 
 namespace Album;
 
-use Zend\Module\Manager;
-use Zend\Module\Consumer\AutoloaderProvider;
 use Zend\Form\View\HelperLoader as FormHelperLoader;
 
-
-class Module implements AutoloaderProvider
+class Module
 {
-
-    public function init(Manager $moduleManager)
-    {
-        $sharedEvents = $moduleManager->events()->getSharedManager();
-        $sharedEvents->attach('bootstrap', 'bootstrap', array($this, 'onBootstrap'));
-    }
-
-
-
     public function getAutoloaderConfig()
     {
         return array(
@@ -39,25 +27,20 @@ class Module implements AutoloaderProvider
 
     public function onBootstrap($e)
     {
-        $app     = $e->getParam('application');
-        $locator = $app->getLocator();
-        $this->helperLoader = $locator->get('Zend\View\HelperLoader');
-
-        $app->events()->attach('route', array($this, 'onRouteFinish'), -100);
+        $application        = $e->getParam('application');
+        $sharedEventManager = $application->events()->getSharedManager();
+        $sharedEventManager->attach('Album', 'dispatch', array($this, 'onAlbumDispatched'), 2);
+        // (change 2 to -2 if you want to call the listener before the action is dispatched)
     }
 
-    public function onRouteFinish($e)
+    public function onAlbumDispatched($e)
     {
-        $matches    = $e->getRouteMatch();
-        $controller = $matches->getParam('controller');
-        $namespace  = substr($controller, 0, strpos($controller, '\\'));
+        // This is only called if a controller within our module has been dispatched
+        $app            = $e->getParam('application');
+        $serviceManager = $app->getServiceManager();
+        $helperLoader   = $serviceManager->get('Zend\View\HelperLoader');
 
-        if ($namespace !== __NAMESPACE__) {
-            return;
-        }
-        
-        // only register form view helpers for this namespace
-        $this->helperLoader->registerPlugins(new FormHelperLoader());
+        $helperLoader->registerPlugins(new FormHelperLoader());
     }
 
 }

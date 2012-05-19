@@ -1,72 +1,65 @@
 <?php
+
 return array(
-    'di' => array(
+    // 'db' information should probably be in config/autoload/db.global.config.php
+    'db' => array(
+        'driver' => 'Pdo',
+        'dsn'            => 'mysql:dbname=zf2tutorial;hostname=localhost',
+        'username'       => 'rob',
+        'password'       => '123456',
+        'driver_options' => array(
+            PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES \'UTF8\''
+        ),
+    ),
 
-        'instance' => array(
-            'Album\Controller\AlbumController' => array(
-                'parameters' => array(
-                    'albumTable' => 'Album\Model\AlbumTable',
-                ),
-            ),
-            'Album\Model\AlbumTable' => array(
-                'parameters' => array(
-                    'adapter' => 'Zend\Db\Adapter\Adapter',
-                )
-            ),
-            'Zend\Db\Adapter\Adapter' => array(
-                'parameters' => array(
-                    'driver' => array(
-                        'driver' => 'Pdo',
-                        'dsn'            => 'mysql:dbname=zf2tutorial;hostname=localhost',
-                        'username'       => 'rob',
-                        'password'       => '123456',
-                        'driver_options' => array(
-                            PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES \'UTF8\''
-                        ),
-                    ),
-                )
-            ),
-            'Zend\View\Resolver\TemplatePathStack' => array(
-                'parameters' => array(
-                    'paths'  => array(
-                        'album' => __DIR__ . '/../view',
-                    ),
-                ),
-            ),
+    // Service Manager factories for creating an AlbumTable with a configured
+    // Db\Adapter.
+    'service_manager' => array(
+        'factories' => array (
+            'db-adapter' =>  function($sm) {
 
-            /**
-             * View helper(s)
-             */
-            'Zend\View\HelperLoader' => array(
-                'parameters' => array(
-                    'map' => array(
-                        'zfcUserIdentity' => 'ZfcUser\View\Helper\ZfcUserIdentity',
-                        'zfcUserLoginWidget' => 'ZfcUser\View\Helper\ZfcUserLoginWidget',
-                    ),
-                ),
-            ),
+                $config = $sm->get('config')->db->toArray();
+                $dbAdapter = new Zend\Db\Adapter\Adapter($config);
+                return $dbAdapter;
+            },
+            'album-table' =>  function($sm) {
+                $dbAdapter = $sm->get('db-adapter');
+                $table = new Album\Model\AlbumTable($dbAdapter);
+                return $table;
+            },
+        ),
+    ),
 
-            // Setup the router and routes
-            'Zend\Mvc\Router\RouteStackInterface' => array(
-                'parameters' => array(
-                    'routes' => array(
-                        'album' => array(
-                            'type'    => 'segment',
-                            'options' => array(
-                                'route'    => '/album[/:action][/:id]',
-                                'constraints' => array(
-                                    'action'     => '[a-zA-Z][a-zA-Z0-9_-]*',
-                                ),
-                                'defaults' => array(
-                                    'controller' => 'Album\Controller\AlbumController',
-                                    'action'     => 'index',
-                                ),
-                            ),
-                        ),
+    // Controllers in this module
+    'controller' => array(
+        'classes' => array(
+            'album' => 'Album\Controller\AlbumController'
+        ),
+    ),
+
+    // Routes for this module
+    'router' => array(
+        'routes' => array(
+            'album' => array(
+                'type'    => 'segment',
+                'options' => array(
+                    'route'    => '/album[/:action][/:id]',
+                    'constraints' => array(
+                        'action'     => '[a-zA-Z][a-zA-Z0-9_-]*',
+                    ),
+                    'defaults' => array(
+                        'controller' => 'album',
+                        'action'     => 'index',
                     ),
                 ),
             ),
+        ),
+    ),    
 
+    // View setup for this module
+    'view_manager' => array(
+        'template_path_stack' => array(
+            'album' => __DIR__ . '/../view',
         ),
     ),
 );
