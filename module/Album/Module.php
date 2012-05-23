@@ -26,24 +26,6 @@ class Module
         return include __DIR__ . '/config/module.config.php';
     }
 
-    public function onBootstrap($e)
-    {
-        $application        = $e->getParam('application');
-        $sharedEventManager = $application->events()->getSharedManager();
-        $sharedEventManager->attach('Album', 'dispatch', array($this, 'onAlbumDispatched'), 2);
-        // (change 2 to -2 if you want the listener to trigger before the action is dispatched)
-    }
-
-    public function onAlbumDispatched($e)
-    {
-        // This is only called if a controller within our module has been dispatched
-        $application    = $e->getParam('application');
-        $serviceManager = $application->getServiceManager();
-        $helperLoader   = $serviceManager->get('Zend\View\HelperLoader');
-
-        $helperLoader->registerPlugins(new FormHelperLoader());
-    }
-
     public function getServiceConfiguration()
     {
         return array(
