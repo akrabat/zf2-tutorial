@@ -3,10 +3,10 @@
 namespace Album\Controller;
 
 use Zend\Mvc\Controller\ActionController,
+    Zend\View\Model\ViewModel,
     Album\Model\AlbumTable,
     Album\Model\Album,
-    Album\Form\AlbumForm,
-    Zend\View\Model\ViewModel;
+    Album\Form\AlbumForm;
 
 class AlbumController extends ActionController
 {
