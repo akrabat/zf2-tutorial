@@ -5,7 +5,7 @@ return array(
     // Controllers in this module
     'controller' => array(
         'classes' => array(
-            'album' => 'Album\Controller\AlbumController'
+            'album/album' => 'Album\Controller\AlbumController'
         ),
     ),
 
@@ -21,7 +21,7 @@ return array(
                         'id'     => '[0-9]+',
                     ),
                     'defaults' => array(
-                        'controller' => 'album',
+                        'controller' => 'album/album',
                         'action'     => 'index',
                     ),
                 ),
