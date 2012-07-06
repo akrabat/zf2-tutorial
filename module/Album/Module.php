@@ -30,6 +30,18 @@ class Module
     {
         return array(
             'factories' => array(
+
+                // One possible way to inject an AlbumTable into the controller/
+                // rather than pulling it from the ServiceManager
+
+                // 'controllers' => array (
+                //     'album' => function($sm) {
+                //         $controller = new AlbumController();
+                //         $controller->setAlbumTable($sm->get('album-table'));
+                //         return $controller;
+                //     }
+                // ),
+
                 'album-table' =>  function($sm) {
                     $dbAdapter = $sm->get('db-adapter');
                     $table = new AlbumTable($dbAdapter);
