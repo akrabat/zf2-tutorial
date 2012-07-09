@@ -42,7 +42,7 @@ class AlbumController extends AbstractActionController
 
     public function editAction()
     {
-        $id = (int)$this->getEvent()->getRouteMatch()->getParam('id');
+        $id = (int)$this->params('id');
         if (!$id) {
             return $this->redirect()->toRoute('album', array('action'=>'add'));
         }
@@ -71,7 +71,7 @@ class AlbumController extends AbstractActionController
 
     public function deleteAction()
     {
-        $id = (int)$this->getEvent()->getRouteMatch()->getParam('id');
+        $id = (int)$this->params('id');
         if (!$id) {
             return $this->redirect()->toRoute('album');
         }
