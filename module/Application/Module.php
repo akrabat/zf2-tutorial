@@ -3,7 +3,6 @@
 namespace Application;
 
 use Zend\Mvc\ModuleRouteListener;
-use Zend\Db\Adapter\Adapter as DbAdapter;
 
 class Module
 {
