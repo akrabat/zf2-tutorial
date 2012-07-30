@@ -1,5 +1,5 @@
 {
-    "hash": "bef21173a5013c8ba60393a2fd32e32a",
+    "hash": "0dec7f0ed037ec44a5f067188ff04355",
     "packages": [
         {
             "package": "zendframework/zendframework",
@@ -10,8 +10,8 @@
         {
             "package": "zendframework/zendframework",
             "version": "dev-master",
-            "source-reference": "18c8e223f070deb07c17543ed938b54542aa0ed8",
-            "commit-date": "1341596499"
+            "source-reference": "release-2.0.0rc1",
+            "commit-date": "1343248155"
         }
     ],
     "packages-dev": null,
